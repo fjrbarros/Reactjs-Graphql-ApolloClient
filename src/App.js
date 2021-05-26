@@ -1,78 +1,22 @@
-// import logo from './logo.svg';
-// import './App.css';
-// import { useQuery } from "@apollo/client";
-// import INFO_PERSON from './querys/index';
+import { useQuery } from '@apollo/client';
+import { Card, ContainerGrid, Loading, Error } from './components/index';
+import INFO_PERSON from './querys/index';
 
-
-// function App() {
-//   const { loading, error, data } = useQuery(INFO_PERSON);
-
-//   if (loading) {
-//     return <p>Loading...</p>
-//   }
-
-//   if (error) {
-//     return <p>Error...</p>
-//   }
-
-//   return (
-//     <section className='parent'>
-//       {
-//         data.characters.results.map((person, index) => (
-//           <div className='card' key={person.name}>
-//             <img src={person.image} alt='Avatar' style={{ width: '100%' }} />
-//             <div className='container'>
-//               <h4>{person.name}</h4>
-//               <p><b>Gender:</b> {person.gender}</p>
-//               <p><b>Specie:</b> {person.species}</p>
-//             </div>
-//           </div>
-//         ))
-//       }
-//     </section>
-//   );
-// }
-
-// export default App;
-
-
-import { useQuery } from "@apollo/client";
-
-import INFO_PERSON from "./querys/index";
-
-import "./App.css";
-
-function App() {
+export default function App() {
   const { loading, error, data } = useQuery(INFO_PERSON);
+  const results = data?.characters?.results;
 
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
 
   if (error) {
-    return <p>an error occurred...</p>;
+    return <Error />;
   }
 
   return (
-    <section className="parent">
-      {data.characters.results.map((person, index) => (
-        <div className="card" key={person.name}>
-          <img src={person.image} alt="Avatar" style={{ width: "100%" }} />
-          <div className="container">
-            <h4>
-              <b>{person.name}</b>
-            </h4>
-            <p>
-              <b>GENDER:</b> {person.gender}
-            </p>
-            <p>
-              <b>SPECIE:</b> {person.species}
-            </p>
-          </div>
-        </div>
-      ))}
-    </section>
+    <ContainerGrid >
+      {results.map(person => <Card key={person.id} person={person} />)}
+    </ContainerGrid>
   );
-}
-
-export default App;
+};
